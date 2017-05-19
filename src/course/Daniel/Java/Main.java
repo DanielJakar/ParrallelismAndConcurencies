@@ -7,28 +7,28 @@ import java.util.function.Consumer;
 public class Main {
 
     public static void main(String[] args) {
-	// write your code here
+
+        // favour encapsulation over inheritance
         Thread t = new Thread(() -> {
+            while (true){
+                System.out.println("Hello"); //do a mission
+                //will make the 2nd Thread sleep.
+                try {
+                    Thread.sleep(5000); // don't use the cpu
+                } catch (InterruptedException e) {
+                    //get rid of any resources and make the thread stop.
+                    //clean up
+                    e.printStackTrace();
+                }
+            }
 
         });
-        
+
         t.start();
 
-        Runnable r = () -> {};
-        r.run();
+        //t.interrupt();
 
-        Callable<String> C = () -> "Hello";
 
-        ArrayList<String> data = new ArrayList<>();
-        data.add("A");
-        data.add("B");
-        data.add("C");
-        data.add("D");
-
-        data.forEach(s -> System.out.println(s.toLowerCase()));
-
-        Consumer<String> consumer = s -> {
-        };
 
 
     }
