@@ -1,9 +1,8 @@
 package course.Daniel.Java;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.function.Consumer;
 
 public class Main {
@@ -11,20 +10,57 @@ public class Main {
 //    private static final Object LOCK = new Object() ;
 
     public static void main(String[] args) {
+        SheepHerd herd = new SheepHerd();
+        ExecutorService pool = Executors.newFixedThreadPool(4);
 
-        ExecutorService service = Executors.newSingleThreadExecutor();
 
-        service.execute(() -> System.out.println("Running the task....."));
-        System.out.println("main");
-        service.execute(() -> System.out.println("Running the task....."));
-        System.out.println("main");
-        service.execute(() -> System.out.println("Running the task....."));
-        System.out.println("main");
-        service.execute(() -> System.out.println("Running the task....."));
-        System.out.println("main");
+        ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);
+        sched.scheduleAtFixedRate(Main::hello, 2, 3, TimeUnit.SECONDS);
+        pool.execute(herd::addSheepAndCount);
 
+
+        ArrayList<String> data = new ArrayList<>();
+        data.add("A");
+        data.add("B");
+        data.add("C");
+        data.add("D");
+
+//        data.forEach(System.out::println);
+        //Method reference:
+        data.forEach(Main::readData);
+
+
+        ExecutorService service = Executors.newFixedThreadPool(4);
+        service.execute(Main::doStuff);
         service.shutdown();
+
     }
+
+    public static void doStuff (){
+        System.out.println("Doing Stuff.");
+    }
+
+    //void accept (T result)
+    public static void readData (String s){
+        System.out.println("Read "+ s);
+    }
+    public static void hello (){
+        System.out.println("Hello, the time is: " + LocalTime.now());
+    }
+
+//        ExecutorService service = Executors.newSingleThreadExecutor();
+//
+//        service.execute(() -> System.out.println("Running the task....."));
+//        System.out.println("main");
+//        service.execute(() -> System.out.println("Running the task....."));
+//        System.out.println("main");
+//        service.execute(() -> System.out.println("Running the task....."));
+//        System.out.println("main");
+//        service.execute(() -> System.out.println("Running the task....."));
+//        System.out.println("main");
+//
+//        service.shutdown();
+
 
 //        SheepHerd herd = new SheepHerd();
 //
