@@ -12,26 +12,28 @@ public class Main {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         //consumer
         //shutdown
-        ExecutorService threadPool = Executors.newFixedThreadPool(4);
-
-
-        Future<String> futureResult = threadPool.submit(() -> {
-            Thread.sleep(1000);
-            return "Surprise!";
+        doStuff((s) -> {
+            System.out.println("The result is here: ");
+            System.out.println(s);
         });
 
-        System.out.println("Main");
 
-        System.out.println("Main is doing some work....");
 
-        System.out.println("Main is waiting for the futureResult");
 
-        System.out.println(futureResult.get());
 
-        System.out.println("Main is done waiting for the futureResult");
 
+    }
+    public static void doStuff(Consumer<String> listener){
+        ExecutorService threadPool = Executors.newFixedThreadPool(4);
+
+        threadPool.submit(() -> {
+            try {Thread.sleep(4000);}
+            catch (InterruptedException ignored) {}
+            //doing some work
+            //call the listener
+            listener.accept("this is the result");
+        });
         threadPool.shutdown();
-
     }
 
     public static void doStuff (){
