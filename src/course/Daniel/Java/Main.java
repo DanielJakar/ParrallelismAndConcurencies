@@ -9,30 +9,28 @@ public class Main {
 
 //    private static final Object LOCK = new Object() ;
 
-    public static void main(String[] args) {
-        SheepHerd herd = new SheepHerd();
-        ExecutorService pool = Executors.newFixedThreadPool(4);
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        //consumer
+        //shutdown
+        ExecutorService threadPool = Executors.newFixedThreadPool(4);
 
 
-        ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);
-        sched.scheduleAtFixedRate(Main::hello, 2, 3, TimeUnit.SECONDS);
-        pool.execute(herd::addSheepAndCount);
+        Future<String> futureResult = threadPool.submit(() -> {
+            Thread.sleep(1000);
+            return "Surprise!";
+        });
 
+        System.out.println("Main");
 
-        ArrayList<String> data = new ArrayList<>();
-        data.add("A");
-        data.add("B");
-        data.add("C");
-        data.add("D");
+        System.out.println("Main is doing some work....");
 
-//        data.forEach(System.out::println);
-        //Method reference:
-        data.forEach(Main::readData);
+        System.out.println("Main is waiting for the futureResult");
 
+        System.out.println(futureResult.get());
 
-        ExecutorService service = Executors.newFixedThreadPool(4);
-        service.execute(Main::doStuff);
-        service.shutdown();
+        System.out.println("Main is done waiting for the futureResult");
+
+        threadPool.shutdown();
 
     }
 
@@ -47,6 +45,51 @@ public class Main {
     public static void hello (){
         System.out.println("Hello, the time is: " + LocalTime.now());
     }
+
+
+
+
+
+//        for (int i = 0; i < 10; i++) {
+//
+//            threadPool.execute(() -> {
+//                try {
+//                    Thread.sleep(10000);
+//                    threadPool.execute((Main::hello));
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            });
+//
+//        }
+
+//        threadPool.shutdown();
+
+//        SheepHerd herd = new SheepHerd();
+//        ExecutorService pool = Executors.newFixedThreadPool(4);
+//
+//
+//        ScheduledExecutorService sched = Executors.newScheduledThreadPool(1);
+//        sched.scheduleAtFixedRate(Main::hello, 2, 3, TimeUnit.SECONDS);
+//        pool.execute(herd::addSheepAndCount);
+//
+//
+//        ArrayList<String> data = new ArrayList<>();
+//        data.add("A");
+//        data.add("B");
+//        data.add("C");
+//        data.add("D");
+//
+////        data.forEach(System.out::println);
+//        //Method reference:
+//        data.forEach(Main::readData);
+//
+//
+//        ExecutorService service = Executors.newFixedThreadPool(4);
+//        service.execute(Main::doStuff);
+//        service.shutdown();
+//
+
 
 //        ExecutorService service = Executors.newSingleThreadExecutor();
 //
